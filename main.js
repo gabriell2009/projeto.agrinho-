@@ -1,6 +1,7 @@
 const botoes = document.querySelectorAll(".botao");
 const textos = document.querySelectorAll(".aba-conteudo");
 
+// BOTÕES DAS ABAS
 for (let i = 0; i < botoes.length; i++) {
     botoes[i].onclick = function () {
 
@@ -14,44 +15,66 @@ for (let i = 0; i < botoes.length; i++) {
     }
 }
 
+// CONTADORES
 const contadores = document.querySelectorAll(".contador");
-const tempoObjetivo1 = new Date("2023-06-05T00:00:00");
-const tempoObjetivo2 = new Date("2023-06-05T00:00:00");
-const tempoObjetivo3 = new Date("2023-06-05T00:00:00");
-const tempoObjetivo4 = new Date("2024-06-05T00:00:00");
 
-const tempos = [tempoObjetivo1, tempoObjetivo2, tempoObjetivo3, tempoObjetivo4];
+// COLOQUE DATAS FUTURAS
+const tempoObjetivo1 = new Date("2026-06-08T00:00:00");
+const tempoObjetivo2 = new Date("2026-06-05T00:00:00");
+const tempoObjetivo3 = new Date("2026-06-05T00:00:00");
+const tempoObjetivo4 = new Date("2026-06-05T00:00:00");
 
+const tempos = [
+    tempoObjetivo1,
+    tempoObjetivo2,
+    tempoObjetivo3,
+    tempoObjetivo4
+];
 
+// FUNÇÃO QUE CALCULA O TEMPO RESTANTE
 function calculaTempo(tempoObjetivo) {
-    let tempoAtual = new Date();
-    let tempoFinal = tempoObjetivo - tempoAtual;
+
+    const tempoAtual = new Date();
+
+    // diferença em milissegundos
+    const tempoFinal = tempoObjetivo - tempoAtual;
+
+    // se acabar o tempo
+    if (tempoFinal <= 0) {
+        return [0, 0, 0, 0];
+    }
+
     let segundos = Math.floor(tempoFinal / 1000);
     let minutos = Math.floor(segundos / 60);
     let horas = Math.floor(minutos / 60);
     let dias = Math.floor(horas / 24);
 
-    segundos %= 60;
-    minutos %= 60;
-    horas %= 24;
-    if (tempoFinal > 24) {
-        return [dias, horas, minutos, segundos];
-    } else {
-        return [0, 0, 0, 0];
-    }
+    segundos = segundos % 60;
+    minutos = minutos % 60;
+    horas = horas % 24;
+
+    return [dias, horas, minutos, segundos];
 }
 
+// ATUALIZA O HTML
 function atualizaCronometro() {
+
     for (let i = 0; i < contadores.length; i++) {
-        document.getElementById("dias" + i).textContent = calculaTempo(tempos[i])[0];
-        document.getElementById("horas" + i).textContent = calculaTempo(tempos[i])[1];
-        document.getElementById("min" + i).textContent = calculaTempo(tempos[i])[2];
-        document.getElementById("seg" + i).textContent = calculaTempo(tempos[i])[3];
+
+        const tempo = calculaTempo(tempos[i]);
+
+        document.getElementById("dias" + i).textContent = tempo[0];
+        document.getElementById("horas" + i).textContent = tempo[1];
+        document.getElementById("min" + i).textContent = tempo[2];
+        document.getElementById("seg" + i).textContent = tempo[3];
     }
 }
 
+// INICIA O CRONÔMETRO
 function comecaCronometro() {
+
     atualizaCronometro();
+
     setInterval(atualizaCronometro, 1000);
 }
 
